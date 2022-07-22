@@ -40,30 +40,44 @@ Sistema de filas de impressão para Unix.
 1) Instalar um debian com um usuário admir.
 
 2) Instalar o libvirt e o Vagrant.
-```apt install libvirt-daemon-system libvirt-clients vagrant virt-viewer
-usermod -G libvirt-qemu,libvirt admir```
+
+```bash
+apt install libvirt-daemon-system libvirt-clients vagrant virt-viewer
+usermod -G libvirt-qemu,libvirt admir
+```
 
 3) Criar uma máquina de Ubuntu no Vagrant.
-```mkdir -p vagrant/ubuntu
+
+```bash
+mkdir -p vagrant/ubuntu
 cd vagrant/ubuntu
 vagrant init generic/ubuntu2004
-vagrant up```
+vagrant up
+```
 
 É possível encontrar imagens de VMs para o Vagrant aqui: https://app.vagrantup.com/boxes/search.
 
 4) Acessar a instância Ubuntu por SSH e instalar o CUPS.
-```vagrant ssh
+
+```bash
+vagrant ssh
 sudo apt update
-sudo apt install cups```
+sudo apt install cups
+```
 
 5) Na instância Ubuntu, configurar o CUPS para permitir acesso à interface administrativa.
-```sudo editor /etc/cups/cupsd.conf```
+
+```bash
+sudo editor /etc/cups/cupsd.conf
+```
 
 Trocar `Listen localhost:631` por `Port 631`.
 
 Adicionar nas seções `<Location />` e `<Location /admin>`, abaixo de `Order`: `Allow @LOCAL`.
 
-```sudo systemctl restart cups```
+```bash
+sudo systemctl restart cups
+```
 
 6) Criar uma máquina Debian no Vagrant.
 Basta seguir o trecho de Ubuntu, mas usando como fonte de imagem `generic/debian11`.
