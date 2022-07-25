@@ -118,7 +118,7 @@ Agora vamos rodar um programa que faz o papel da impressora. Ele assume como par
   - `-r off`: desabilita anúncio via broadcast.
 
 ```bash
-ippeveprinter -k -f application/pdf -r off nomedasuaimpressora
+sudo ippeveprinter -k -f application/pdf -r off nomedasuaimpressora
 ```
 
 8) Instalaremos no CUPS a impressora. No navegador, e supondo que o endereço do passo anterior é `192.168.27.18`:
@@ -135,6 +135,41 @@ ipp://192.168.27.18/ipp/print
   - Basta escolher um nome e marcar para compartilhar (*Share This Printer*) e continuar;
   - Falta escolher o *driver*. Escolheremos `Generic`, depois clicaremos em **Continue** para escolhermos o modelo. Infelizmente o CUPS não reconheceu o modelo, então ele apresentará o modelo como `{current_make_and_model}`. Basta clicar em **Add Printer**;
   - Para finalizar, o CUPS dá uma lista de opções padrão para a impressora. Por exemplo, frente-e-verso é uma opção possível. Clicar em **Set Default Options**.
+
+9) Vamos imprimir alguma coisa para testar. Talvez seja necessário instalar o `evince`.
+
+```bash
+/bin/su -
+apt install evince
+exit
+```
+
+Baixar um PDF. Exemplo:
+
+```bash
+wget www.linux.ime.usp.br/~gnann/100m.pdf
+```
+
+É possível configurar momentaneamente um servidor de impressão a partir da variável `CUPS_SERVER`. Vamos usar o endereço do Ubuntu, que é onde roda o CUPS.
+
+```bash
+export CUPS_SERVER=192.168.31.41
+evince 100m.pdf
+```
+
+Imprimir como o usual, escolhendo a impressora recém instalada.
+
+**OBS:** se não definirmos a variável, o padrão é usar o *hostname* da máquina.
+
+10) Resta-nos verificar se algo foi impresso.
+
+Na máquina Debian, que ainda deve estar rodando o `ippeveprinter`, fechá-lo com um `CTRL+C`.
+
+Depois, verificar se algum documento foi impresso em `/tmp/ippeveprinter.NUMERO`.
+
+```bash
+ls /tmp/ipp*
+```
 
 ### Referências
   - https://www.admin-magazine.com/Articles/Hardware-assisted-Virtualization
