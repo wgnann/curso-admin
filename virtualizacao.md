@@ -79,8 +79,62 @@ Adicionar nas seções `<Location />` e `<Location /admin>`, abaixo de `Order`: 
 sudo systemctl restart cups
 ```
 
+A fim de verificar se tudo correu como o esperado, basta obter o endereço IP da máquina, abrir um navegador e tentar acessá-lo:
+
+```bash
+ip address
+```
+
+O comando listará todas as suas interfaces de rede. No contexto do exercício, serão dois:
+  - `lo`
+  - `eth0`
+
+O nome `lo` é dado à interface de *loopback*, cujo objetivo é permitir a comunicação do computador com ele mesmo. O endereço IP associado à interface vem justamente depois da palavra `inet`.
+
+Com o endereço obtido no passo anterior, suporemos que é o `192.168.31.41`, abrir o navegador e acessar: `192.168.31.41:631`. Deverá aparecer uma página com a palavra **CUPS**.
+
 6) Criar uma máquina Debian no Vagrant.
 Basta seguir o trecho de Ubuntu, mas usando como fonte de imagem `generic/debian11`.
+
+7) Acessar a máquina Debian, instalar e configurar o cups-ipp-utils. Ele fornecerá uma impressora virtual que fala IPP.
+
+```bash
+vagrant ssh
+sudo apt update
+sudo apt install cups-ipp-utils
+```
+
+Obteremos, agora, o endereço IP da máquina Debian a partir do comando `ip` tal qual fizemos anteriormente.
+
+```bash
+ip address
+```
+
+Anotar o endereço em algum lugar, pois ele será utilizado para instalar a impressora.
+
+Agora vamos rodar um programa que faz o papel da impressora. Ele assume como parâmetros:
+  - `-k`: guarda os arquivos impressos;
+  - `-f`: determina com qual tipo de arquivo a impressora trabalha;
+  - `-r off`: desabilita anúncio via broadcast.
+
+```bash
+ippeveprinter -k -f application/pdf -r off nomedasuaimpressora
+```
+
+8) Instalaremos no CUPS a impressora. No navegador, e supondo que o endereço do passo anterior é `192.168.27.18`:
+  - Voltar à página do **CUPS**;
+  - Clicar em **Administration** e, depois, em **Add Printer**. Aparecerá uma página escrevendo **Upgrade Required** e voltará para a página anterior depois de uns instantes;
+  - Clicar novamente em **Add Printer**;
+  - Na nova página, selecionar `Internet Printing Protocol (ipp)` e clicar em **Continue**;
+  - Preencheremos, no campo **Connection**, o endereço obtido no passo anterior acompanhado do protocolo utilizado e, depois, clicar em **Continue**. O conteúdo completo ficará:
+
+```bash
+ipp://192.168.27.18/ipp/print
+```
+
+  - Basta escolher um nome e marcar para compartilhar (*Share This Printer*) e continuar;
+  - Falta escolher o *driver*. Escolheremos `Generic`, depois clicaremos em **Continue** para escolhermos o modelo. Infelizmente o CUPS não reconheceu o modelo, então ele apresentará o modelo como `{current_make_and_model}`. Basta clicar em **Add Printer**;
+  - Para finalizar, o CUPS dá uma lista de opções padrão para a impressora. Por exemplo, frente-e-verso é uma opção possível. Clicar em **Set Default Options**.
 
 ### Referências
   - https://www.admin-magazine.com/Articles/Hardware-assisted-Virtualization
