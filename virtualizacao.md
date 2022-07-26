@@ -1,6 +1,3 @@
-# Curso para Admin
-Material para algumas aulas do curso de admin da Linux.
-
 ## Virtualização e o serviço mais importante de um admin
 
 ### O que é uma máquina virtual?
@@ -201,5 +198,3 @@ ls /tmp/ipp*
   - README.Debian.gz
   - https://www.admin-magazine.com/Articles/Hardware-assisted-Virtualization
   - https://debian-handbook.info/browse/pt-BR/stable/sect.apparmor.html
-
-## Organização e instalação de um sistema web
