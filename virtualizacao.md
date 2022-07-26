@@ -23,8 +23,33 @@ Como resolver esse problema num mundo sem virtualização? Simples(?), basta aum
 
 Com o advento da tecnologia de virtualização, tornou-se possível tanto desacoplar os sistemas quanto usar o hardware de forma mais eficiente. A ideia é meramente distribuir os sistemas em máquinas virtuais.
 
+### Considerações de segurança
+Adotar máquinas virtuais inerentemente é menos seguro do que separar as aplicações em instâncias físicas distintas. Como temos diversas modalidades de virtualização vale discutir o que cada uma tem de problema.
+
+#### Virtualização
+No limite, a máquina virtual é uma peça de software que roda numa máquina real - vamos chamá-la de *host* - e, em geral, sobre um sistema operacional já instalado.
+
+Do ponto de vista do *host* a máquina virtual oriunda da virtualização completa é nada mais que mais ou programa rodando, então a superfície de ataque disponível é a mesma de qualquer outro processo comprometido. Já na virtualização assistida por hardware também é possível atacar a infraestrutura que possibilita a própria virtualização. Como se trata de um conjunto extra de instruções, há um conjunto maior de coisas com as quais se deve tomar cuidado.
+
+Como se trata de um programa rodando no *host*, a compromissão de uma máquina virtual dispõe dos mesmos problemas da compromissão de um programa qualquer: uma vez comprometido, o atacante terá no sistema operacional o mesmo nível de privilégio que o programa atacado. Nesse sentido é recomendado não rodar as máquinas virtuais com permissão de `root`.
+
+#### Containers
+Um container também é um programa rodando no *host*, mas, ao contrário da máquina virtual de fato, ele **compartilha o kernel** com o *host*. Isso significa que o cuidado com um container, se comparado à uma máquina virtual, deve ser redobrado. Deve-se limitar bastante o que um container deve fazer, por exemplo, utilizando controles de acesso mandatórios. Em linhas gerais, o controle mandatório funciona como um filtro de chamadas de sistema: o processo solicita ao sistema operacional uma operação (e.g. acessar um determinado arquivo) e o sistema de controle verifica se esse processo está autorizado. Segue como corolário que se torna mais difícil para um programa realizar operações que não foram permitidas, reduzindo a superfície de ataque.
+
+Existem duas possibilidades para se rodar um container: como `root` ou como usuário comum. O primeiro modelo é conhecido por *container privilegiado* enquanto o segundo, por *container desprivilegiado*. Rodar o container sem ser como `root`, por construção, diminui a superfície de ataque dado que, aos holhos do *host*, o container será somente mais um processo comum. Como o kernel é compartilhado.
+
+#### Regra de bolso
+Sempre que possível, vale a pena tentar usar containers desprivilegiados e garantindo, ainda, que os recursos liberados sejam os mínimos possíveis.
+
+Se houver a necessidade de uma separação maior (e.g. servidor de SSH), pode ser interessante usar o modelo de máquina virtual.
+
+Por fim, se houver a necessidade de se rodar um kernel distinto ou mesmo um sistema numa arquietura completamente distinta, o que resta é usar uma máquina virtual.
+
 ### Algumas tecnologias utilizadas
 Para a presente aula, utilizaremos diversas tecnologias. Algumas delas serão descritas adiante.
+
+#### AppArmor
+Sistema de controle de acesso mandatório utilizado em algumas distribuições de Linux. Confina os processos a um conjunto pré-determinado de recursos, limitando a superfície de um eventual ataque.
 
 #### libvirt
 libvirt é uma API que facilita as rotinas de virtualização. Possibilita sem muito esforço a criação de instâncias de máquina virtual tanto usando Qemu quanto usando o KVM. Ela pode ser utilizada por outras ferramentas de virtualização como o Vagrant.
@@ -172,6 +197,9 @@ ls /tmp/ipp*
 ```
 
 ### Referências
+  - manual (comando `man`)
+  - README.Debian.gz
   - https://www.admin-magazine.com/Articles/Hardware-assisted-Virtualization
+  - https://debian-handbook.info/browse/pt-BR/stable/sect.apparmor.html
 
 ## Organização e instalação de um sistema web
