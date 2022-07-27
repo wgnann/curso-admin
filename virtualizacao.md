@@ -9,7 +9,7 @@ Virtualizar completamente significa que todos os componentes do computador virtu
 
 Uma alternativa à virtualização completa é a virtualização assistida por hardware. A grande diferença é que, agora, existe um nível a mais de execução no processador que ajuda a isolar o que é rodado na máquina virtual do que é rodado no sistema da máquina de fato. Isso permite rodar as instruções diretamente no processador, evitando a necessidade de emulação completa em vários casos. O custo, claro, é que a troca de contexto fica enorme. Contudo, trata-se de um custo bem menor ao de emular tudo. As tecnologias abertas mais usuais nessa direção são o KVM (Kernel-based Virtual Machine) e o Xen.
 
-Outra alternativa é virtualizar no nível do sistema operacional, separando os contextos dos processos "virtualizados" do contexto dos processos do sistema de fato. Como se trata meramente de uma estratégia de isolamento de processos, o kernel terá de ser o mesmo do sistema de fato. Isso não impede a possibilidade de limitar os recursos concedidos ao contexto da máquina virtual. Entretanto, expõe aumenta a superfície de exposição da máquina de fato a ataques, pois, apesar do isolamento, o kernel continua sendo o mesmo para ambas. Naturalmente, aos olhos da máquina de fato, esse é o modelo menos custoso porque nem emula um processador, tampouco impõe pesadas trocas de contexto. Um sistema de containers bastante comum em distribuições de Linux é o LXC (Linux Containers).
+Outra alternativa é virtualizar no nível do sistema operacional, separando os contextos dos processos "virtualizados" do contexto dos processos do sistema de fato. Como se trata meramente de uma estratégia de isolamento de processos, o kernel terá de ser o mesmo do sistema de fato. Isso não impede a possibilidade de limitar os recursos concedidos ao contexto da máquina virtual. Entretanto, aumenta a superfície de exposição da máquina de fato a ataques, pois, apesar do isolamento, o kernel continua sendo o mesmo para ambas. Naturalmente, aos olhos da máquina de fato, esse é o modelo menos custoso porque nem emula um processador, tampouco impõe pesadas trocas de contexto. Um sistema de containers bastante comum em distribuições de Linux é o LXC (Linux Containers).
 
 ### Por que virtualizar?
 Num mundo pregresso, os servidores eram computadores de proporções monstruosas onde todos os programas rodavam em conjunto. A fim de usar o espaço de forma eficiente, as distribuições de Linux comumente adotam um sistema de bibliotecas compartilhadas, isto é, dois programas que compartilham um dado conjunto de bibliotecas ocuparão menos espaço do que se fossem instalados em separado. No entanto, essa economia de espaço acompanha uma debacle potencial: e se as bibliotecas exigidas por ambos os programas se tornarem incompatíveis entre si?
@@ -33,7 +33,7 @@ Como se trata de um programa rodando no *host*, a compromissão de uma máquina 
 #### Containers
 Um container também é um programa rodando no *host*, mas, ao contrário da máquina virtual de fato, ele **compartilha o kernel** com o *host*. Isso significa que o cuidado com um container, se comparado à uma máquina virtual, deve ser redobrado. Deve-se limitar bastante o que um container deve fazer, por exemplo, utilizando controles de acesso mandatórios. Em linhas gerais, o controle mandatório funciona como um filtro de chamadas de sistema: o processo solicita ao sistema operacional uma operação (e.g. acessar um determinado arquivo) e o sistema de controle verifica se esse processo está autorizado. Segue como corolário que se torna mais difícil para um programa realizar operações que não foram permitidas, reduzindo a superfície de ataque.
 
-Existem duas possibilidades para se rodar um container: como `root` ou como usuário comum. O primeiro modelo é conhecido por *container privilegiado* enquanto o segundo, por *container desprivilegiado*. Rodar o container sem ser como `root`, por construção, diminui a superfície de ataque dado que, aos holhos do *host*, o container será somente mais um processo comum. Como o kernel é compartilhado.
+Existem duas possibilidades para se rodar um container: como `root` ou como usuário comum. O primeiro modelo é conhecido por *container privilegiado* enquanto o segundo, por *container desprivilegiado*. Rodar o container sem ser como `root`, por construção, diminui a superfície de ataque dado que, aos olhos do *host*, o container será somente mais um processo comum. Como o kernel é compartilhado.
 
 #### Regra de bolso
 Sempre que possível, vale a pena tentar usar containers desprivilegiados e garantindo, ainda, que os recursos liberados sejam os mínimos possíveis.
@@ -59,7 +59,7 @@ Sistema de filas de impressão para Unix.
 
 ### Atividades
 
-1) Instalar um debian com um usuário admir.
+1) Instalar um debian com um usuário chamado admir.
 
 2) Instalar o libvirt e o Vagrant.
 
