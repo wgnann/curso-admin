@@ -140,7 +140,7 @@ Agora vamos rodar um programa que faz o papel da impressora. Ele assume como par
   - `-r off`: desabilita anúncio via broadcast.
 
 ```bash
-sudo ippeveprinter -k -f application/pdf -r off nomedasuaimpressora
+sudo ippeveprinter -p 631 -k -f application/pdf -r off nomedasuaimpressora
 ```
 
 8) Instalaremos no CUPS a impressora. No navegador, e supondo que o endereço do passo anterior é `192.168.27.18`:
