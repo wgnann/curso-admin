@@ -84,9 +84,7 @@ create database wordpress;
 grant all privileges on wordpress.* to wordpress;
 ```
 
-6) Voltar ao `backend`.
-
-Lá:
+6) Instalar o Wordpress: voltar ao `backend`. Lá:
   - trocar de diretório para `/var/www/html`;
   - instalar o `unzip` e o `wget` via `apt-get`;
   - baixar o Wordpress com o `wget` e o extrair;
